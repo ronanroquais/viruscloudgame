@@ -24,24 +24,21 @@ define(function(require) {
       this.physicsManager = new PhysicsManager();
       this.physicsManager.init();
 
-      entityList.push(new Entity());
+      // create first player
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:100, y:200, width:10, height:10 }
+        )
+      );
 
-      entityList.forEach(function(e) {
-        e.init();
-
-        var image     = new Image();
-        image.onload  = function() {
-          e.image = image;
-        };
-        image.src     = "app/img/playerA.png";
-
-        e.physicsBody = new PhysicsBody({
-          x:100,
-          y:200,
-          width:100,
-          height:10
-        });
-      });
+      // create test platform
+      entityList.push(
+        this._createEntity(
+          "app/img/platformTile.png",
+          { x:300, y:300, width:100, height:20, isFixed:true }
+        )
+      );
     };
     
     this.initRound = function() {
@@ -69,6 +66,22 @@ define(function(require) {
     };
     this.draw = function() {
       this.renderManager.render(entityList);
+    };
+
+    this._createEntity  = function(imagePath, physicsOpts) {
+      var entity    = new Entity();
+
+      entity.init();
+
+      var image       = new Image();
+      image.onload    = function() {
+        entity.image  = image;
+      };
+      image.src       = imagePath;
+
+      entity.physicsBody  = new PhysicsBody(physicsOpts);
+
+      return entity;
     };
     this.init(); // constructor call
   };

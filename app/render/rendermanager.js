@@ -40,6 +40,7 @@ define(function() {
 					var drawX	= physicsBody.x - (physicsBody.width / 2);
 					var drawY	= this.canvas.getYRepereForDrawing(physicsBody.y, physicsBody.height);
 
+					// horrible hackyness to tile the image of platforms, but not players
 					if (physicsBody.isFixed)
 					{
 						this.canvas.ctx.fillStyle	= this.canvas.ctx.createPattern(image, "repeat");
