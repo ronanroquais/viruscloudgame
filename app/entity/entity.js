@@ -15,6 +15,7 @@ define(function(require) {
 
 		this.update	= function(time)
 		{
+			this.physicsBody.update(time);
 		};
 	}
 

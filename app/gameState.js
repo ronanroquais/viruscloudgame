@@ -6,6 +6,7 @@ define(function(require) {
   var Jar = require('jar');
   var levels = require('levels');
   var PhysicsBody = require('physics/physicsBody');
+  var PhysicsManager = require('physics/physicsManager');
 
   var Entity = require('entity/entity');
   var RenderManager = require('render/rendermanager');
@@ -13,12 +14,15 @@ define(function(require) {
   var GameState = function(gameCallbacks)
   {
     var renderManager;
+    var physicsManager;
 
     var entityList  = [];
 
     this.init = function() {
       this.renderManager = new RenderManager();
       this.renderManager.init(wideCanvas);
+      this.physicsManager = new PhysicsManager();
+      this.physicsManager.init();
 
       entityList.push(new Entity());
 
@@ -32,8 +36,8 @@ define(function(require) {
         image.src     = "app/img/playerA.png";
 
         e.physicsBody = new PhysicsBody({
-          x:0,
-          y:0,
+          x:100,
+          y:200,
           width:10,
           height:10
         });
@@ -49,14 +53,17 @@ define(function(require) {
       
     this.takeInput = function(p1Keys, p2Keys)
     {
+      if(p1Keys.left())
+        entityList[0].physicsBody.moveLeft();
+      else if(p1Keys.right())
+        entityList[0].physicsBody.moveRight();
     };
     this.update = function() {
-      entityList.forEach(function(e) {
-        e.update();
-      });
+      this.physicsManager.update(entityList);
+      this.checkCollision();
     };
     this.checkCollision = function () {
-
+      this.physicsManager.checkCollision(entityList)
     };
     this.draw = function() {
       this.renderManager.render(entityList);
