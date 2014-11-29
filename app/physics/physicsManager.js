@@ -1,9 +1,9 @@
 define(function(require) {
-  var PhysicsManager = function()
+  var PhysicsManager = function(gameState)
   {
     var MathUtils = require('lib/MathUtils');
     var settings = require('settings');
-    this.init =function()
+    this.init =function(gameState)
     {
 
     };
@@ -41,6 +41,28 @@ define(function(require) {
         {
           baseRect.y = 0;
           baseRect.canJump = true;
+        }
+        entities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
+        entities[base].physicsBody.y = baseRect.y;
+        entities[base].physicsBody.velocityX = baseRect.velocityX;
+        entities[base].physicsBody.velocityY = baseRect.velocityY;
+        entities[base].physicsBody.canJump = baseRect.canJump;
+      }
+      for(base = 0; base < entities.length; base++)
+      {
+
+        if(entities[base].physicsBody.isFixed)
+          continue;
+        
+        baseRect = {
+          x : entities[base].physicsBody.x - entities[base].physicsBody.width/2,
+          y : entities[base].physicsBody.y,
+          width : entities[base].physicsBody.width,
+          height : entities[base].physicsBody.height,
+          canJump : entities[base].physicsBody.canJump,
+          velocityX : entities[base].physicsBody.velocityX,
+          velocityY : entities[base].physicsBody.velocityY,
+          isFixed : entities[base].physicsBody.isFixed
         }
 //        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
 
@@ -86,6 +108,10 @@ define(function(require) {
               //baseRect.y -= overlappingPoint.y/2;
               targetRect.x += overlappingPoint.x/2;
               //targetRect.y += overlappingPoint.y/2;
+              if(baseRect.y > targetRect.y+targetRect.height/2 && overlappingPoint.x < baseRect.width/2)
+              {
+                gameState.entityJumpsOn(base, target);
+              }
             }
           }
           entities[target].physicsBody.x = targetRect.x + entities[target].physicsBody.width/2;
