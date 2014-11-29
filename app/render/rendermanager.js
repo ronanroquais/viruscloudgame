@@ -1,5 +1,4 @@
 define(function() {
-	// var WideCanvas		= require("lib/widecanvas");
 	var settings = require('settings');
 
 	var RenderManager	= function()
@@ -17,6 +16,7 @@ define(function() {
 			this.canvas.clear();
 
 			this._renderBg();
+			// this._renderEntities(entityList);
 			this._renderEntitiesDEBUG(entityList);
 		};
 
@@ -30,16 +30,17 @@ define(function() {
 		this._renderEntities	= function(entityList)
 		{
 			entityList.forEach(function(e) {
-				// get position of entity
-				var pos		= {
-					x:100,
-					y:100
-				};
+				// get position and dimensions of entity
+				var physicsBody	= e.physicsBody;
 				// get image for entity
-				// var image	= e.image;
-				var image	= e.image;
+				var image		= e.image;
 				// draw image for entity at position
-				this.canvas.ctx.drawImage(image, pos.x, pos.y);
+				if (image != null)
+					this.canvas.ctx.drawImage(
+						image, 
+						physicsBody.x - (physicsBody.width / 2),
+						this.canvas.getYRepereForDrawing(physicsBody.y, physicsBody.height)
+					);
 			}.bind(this));
 		};
 
@@ -63,11 +64,11 @@ define(function() {
 
 				// draw image for entity at position
 				this.canvas.ctx.drawImage(
-					image, physicsBody.x - (physicsBody.width / 2),
+					image,
+					physicsBody.x - (physicsBody.width / 2),
 					this.canvas.getYRepereForDrawing(physicsBody.y, physicsBody.height)
 				);
 			}.bind(this));
-			image = document.createElement("canvas");
 		};
 	};
 
