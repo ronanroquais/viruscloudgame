@@ -24,24 +24,46 @@ define(function(){
       return point.x >= rectangle.x && point.x <= rectangle.x + rectangle.width
               && point.y >= rectangle.y && point.y <= rectangle.y + rectangle.height;
     },
+    //returns negative value if right part of the firstRect is overlapping left part of secondRect [ 1 [ ] 2 ] = -1
+    //returns positive value if left part of firstRect is overlapping right part of secondRect [ 2 [] 1 ] = + 1
     getXSizeOfOverlap : function(firstRect, secondRect)
     {
-      var maxLeft = Math.max(firstRect.x, secondRect.x);
-      var minRight = Math.min(firstRect.x+firstRect.width, secondRect.x+secondRect.width);
+      if(firstRect.x < secondRect.x)
+        return getXSizeOfOverlap(firstRect, secondRect);
+      else return -1 * getXSizeOfOverlap(secondRect, firstRect);
+    },
+    getXLeftRightSizeOfOverlap : function(leftRect, rightRect)
+      var maxLeft = Math.max(leftRect.x, rightRect.x);
+      var minRight = Math.min(leftRect.x+leftRect.width, rightRect.x+rightRect.width);
       var result = minRight - maxLeft;
       if(result > 0)
         return result;
       return 0;
     },
+    //returns negative value if top part of the firstRect is overlapping bottom part of secondRect
+    //returns positive value if bottom part of firstRect is overlapping top part of secondRect
     getYSizeOfOverlap : function(firstRect, secondRect)
     {
-      var maxTop = Math.max(firstRect.y, secondRect.y);
-      var minBottom = Math.min(firstRect.y+firstRect.height, secondRect.y+secondRect.height);
-      var result = minBottom - maxTop;
+      if(firstRect.y < secondRect.y)
+        return getYSizeOfOverlap(firstRect, secondRect);
+      else return -1 * getYSizeOfOverlap(secondRect, firstRect);
+    },
+    getYTopBottomSizeOfOverlap : function(bottomRect, topRect)
+    {
+      var maxBottom = Math.max(bottomRect.y, topRect.y);
+      var minTop = Math.min(bottomRect.y+bottomRect.height, topRect.y+topRect.height);
+      var result = maxTop - minBottom;
       if(result > 0)
         return result;
       return 0;
     },
+    getXYSizeOfOverlap : function(firstRect, secondRect)
+    {
+      return {
+        x: getXSizeOfOverlap(firstRect, secondRect),
+        y: getYSizeOfOverlap(firstRect, secondRect)
+      }
+    }
     // Thales <3
     getYFromXOnLineFormedByTwoPoints : function(wantedX, originX, originY, destX, destY)
     {
@@ -53,6 +75,10 @@ define(function(){
       
       var normedResultY = (normedWantedX / normedX) * normedY;
       return normedResultY + originY;
+    },
+    minMax : function(value, min, max)
+    {
+      return Math.min(max, Math.min(max, value));
     }
   };
   return MathUtils;
