@@ -30,15 +30,73 @@ define(function(require) {
     this.init = function() {
       this.renderManager = new RenderManager();
       this.renderManager.init(wideCanvas);
-      this.physicsManager = new PhysicsManager();
+      this.physicsManager = new PhysicsManager(this);
       this.physicsManager.init();
 
       // create first player
       entityList.push(
         this._createEntity(
           "app/img/playerA.png",
-          { x:100, y:200, width:10, height:20 },
+          { x:100, y:200, width:32, height:32 },
           OWNER_PLAYER_A
+        )
+      );
+
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
+        )
+      );
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:32, height:32 }
         )
       );
 
@@ -46,7 +104,29 @@ define(function(require) {
       entityList.push(
         this._createEntity(
           "app/img/platformTile.png",
-          { x:300, y:300, width:100, height:20, isFixed:true },
+          { x:300, y:100, width:100, height:20, isFixed:true }
+        )
+      );
+      // create test platform
+      entityList.push(
+        this._createEntity(
+          "app/img/platformTile.png",
+          { x:500, y:50, width:100, height:20, isFixed:true }
+        )
+      );
+      // create test platform
+      entityList.push(
+        this._createEntity(
+          "app/img/platformTile.png",
+          { x:150, y:200, width:100, height:20, isFixed:true },
+          OWNER_PLATFORM
+        )
+      );
+      // create test platform
+      entityList.push(
+        this._createEntity(
+          "app/img/platformTile.png",
+          { x:400, y:150, width:100, height:20, isFixed:true },
           OWNER_PLATFORM
         )
       );
@@ -87,6 +167,10 @@ define(function(require) {
       this._setEntityImage(entity, this._getImgFromOwner(newOwner));
       entity.owner  = newOwner;
     };
+    this.entityJumpsOn = function(base, target)
+    {
+      console.log(base + " jumps on " + target);
+    }
 
     this._createEntity  = function(imagePath, physicsOpts, owner) {
       var entity    = new Entity();
