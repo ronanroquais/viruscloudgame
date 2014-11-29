@@ -36,7 +36,7 @@ define(function(require)
       this.p1Keys = new MovementHelper(['W','S','A','D','Space','R','T','F','G']);//{keyLeft:65, keyAction:82, keyAction2:84, keyRight:68, keyDown: 83, keyUp:87});
       this.p2Keys = new MovementHelper(['I','K','J','L','Shift','O','P',';',"'"]);//{keyLeft:74, keyAction:80, keyAction2:219, keyRight:76, keyDown: 75, keyUp:73});
     
-      this.startIntroState();
+      this.startGameState();
     };
     
     this.actOnKey = function(keyCode, pressed) // PROBLEME DEPENDANCE CIRCULAIRE
@@ -108,10 +108,7 @@ define(function(require)
     {
       this.p1Keys.reset();
       this.p2Keys.reset();
-      totalMatches += 1;
-      if(properties.isP1Active && properties.isP2Active)
-        currentState = new VersusGameState(this);
-      else currentState = new SoloGameState(this);
+      currentState = new GameState(this);
     };
 
     this.gameLoop = function()
