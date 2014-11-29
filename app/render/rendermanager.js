@@ -16,8 +16,8 @@ define(function() {
 			this.canvas.clear();
 
 			this._renderBg();
-			// this._renderEntities(entityList);
-			this._renderEntitiesDEBUG(entityList);
+			this._renderEntities(entityList);
+			// this._renderEntitiesDEBUG(entityList);
 		};
 
 
@@ -36,11 +36,23 @@ define(function() {
 				var image		= e.image;
 				// draw image for entity at position
 				if (image != null)
-					this.canvas.ctx.drawImage(
-						image, 
-						physicsBody.x - (physicsBody.width / 2),
-						this.canvas.getYRepereForDrawing(physicsBody.y, physicsBody.height)
-					);
+				{
+					var drawX	= physicsBody.x - (physicsBody.width / 2);
+					var drawY	= this.canvas.getYRepereForDrawing(physicsBody.y, physicsBody.height);
+
+					if (physicsBody.isFixed)
+					{
+						this.canvas.ctx.fillStyle	= this.canvas.ctx.createPattern(image, "repeat");
+						this.canvas.ctx.fillRect(
+							drawX, drawY,
+							physicsBody.width, physicsBody.height
+						);
+					}
+					else
+					{
+						this.canvas.ctx.drawImage(image, drawX, drawY);
+					}
+				}
 			}.bind(this));
 		};
 
