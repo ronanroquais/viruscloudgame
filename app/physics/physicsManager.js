@@ -54,21 +54,16 @@ define(function(require) {
             width : entities[target].physicsBody.width,
             height : entities[target].physicsBody.height,
             isFixed : entities[target].physicsBody.isFixed
-          }
-          console.log(entities[base].physicsBody);
+          }/*          console.log(entities[base].physicsBody);
           console.log(baseRect);
           console.log(entities[target].physicsBody);
           console.log(targetRect);
+*/          
           if(MathUtils.areRectanglesColliding(baseRect, targetRect))
           {
             var overlappingPoint = MathUtils.getXYSizeOfOverlap(baseRect, targetRect);
             if(targetRect.isFixed)
             {
-              if(Math.abs(overlappingPoint.x) > 0)
-              {
-                baseRect.velocityX = 0;
-                baseRect.x -= overlappingPoint.x;
-              }
               if(Math.abs(overlappingPoint.y) > 0)
               {
                 baseRect.velocityY = 0;
@@ -78,13 +73,19 @@ define(function(require) {
                   baseRect.canJump = true;
                 }
               }
+              //needs to be adressed but good for proto
+              else if(false && Math.abs(overlappingPoint.x) > 0)
+              {
+                baseRect.velocityX = 0;
+                baseRect.x -= overlappingPoint.x;
+              }
             }
             else
             {
               baseRect.x -= overlappingPoint.x/2;
-              baseRect.y -= overlappingPoint.y/2;
+              //baseRect.y -= overlappingPoint.y/2;
               targetRect.x += overlappingPoint.x/2;
-              targetRect.y += overlappingPoint.y/2;
+              //targetRect.y += overlappingPoint.y/2;
             }
           }
           entities[target].physicsBody.x = targetRect.x + entities[target].physicsBody.width/2;
