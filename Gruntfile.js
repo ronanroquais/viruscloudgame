@@ -91,9 +91,9 @@ module.exports = function(grunt) {
       compile: {
         options: {
           name: 'config',
-          baseUrl: './iApp/',
-          mainConfigFile: 'iApp/config.js',
-          out: 'dist/ilumilumi.js',
+          baseUrl: './app/',
+          mainConfigFile: 'app/config.js',
+          out: 'dist/viruscloud.js',
           optimize: 'uglify'
         }
       }

@@ -44,28 +44,28 @@ define(function(require) {
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:700, y:200, width:32, height:32 },
           OWNER_PLAYER_B
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:400, y:100, width:32, height:32 },
           OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:400, y:400, width:32, height:32 },
           OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:500, y:300, width:32, height:32 },
           OWNER_NPC
         )
       );
@@ -73,28 +73,21 @@ define(function(require) {
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:300, y:300, width:32, height:32 },
           OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:200, y:200, width:32, height:32 },
           OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          { x:600, y:200, width:32, height:32 },
-          OWNER_NPC
-        )
-      );
-      // NPC
-      entityList.push(
-        this._createEntity(
-          { x:600, y:200, width:32, height:32 },
+          { x:600, y:100, width:32, height:32 },
           OWNER_NPC
         )
       );
@@ -102,30 +95,53 @@ define(function(require) {
       // create test platform
       entityList.push(
         this._createEntity(
-          { x:300, y:100, width:100, height:20, isFixed:true }
+          { x:400, y:300, width:100, height:20, isFixed:true }
+        )
+      );
+      entityList.push(
+        this._createEntity(
+          { x:290, y:220, width:100, height:20, isFixed:true }
+        )
+      );
+      entityList.push(
+        this._createEntity(
+          { x:510, y:220, width:100, height:20, isFixed:true }
         )
       );
       // create test platform
       entityList.push(
         this._createEntity(
-          { x:500, y:50, width:100, height:20, isFixed:true }
+          { x:100, y:150, width:100, height:20, isFixed:true }
         )
       );
       // create test platform
       entityList.push(
         this._createEntity(
-          { x:150, y:200, width:100, height:20, isFixed:true },
+          { x:700, y:150, width:100, height:20, isFixed:true }
+        )
+      );
+      // create test platform
+      entityList.push(
+        this._createEntity(
+          { x:250, y:50, width:100, height:20, isFixed:true },
           OWNER_PLATFORM
         )
       );
       // create test platform
       entityList.push(
         this._createEntity(
-          { x:400, y:150, width:100, height:20, isFixed:true },
+          { x:550, y:50, width:100, height:20, isFixed:true },
           OWNER_PLATFORM
         )
       );
-
+      // create test platform
+/*      entityList.push(
+        this._createEntity(
+          { x:650, y:150, width:100, height:20, isFixed:true },
+          OWNER_PLATFORM
+        )
+      );
+*/
       this.startTime  = Date.now();
       this.maxTime    = 30000;
     };
@@ -135,17 +151,54 @@ define(function(require) {
     
     this.isGameFinished = function() 
     {
+      if(this._timeLeft <= 0)
+        return true;
+
+      for (var i = 0; i < entityList.length; i++)
+      {
+        if(entityList[i].owner == OWNER_PLAYER_B)
+          break
+        else if(i == entityList.length -1)
+        {
+          return true;
+        }
+      };
+      for (var i = 0; i < entityList.length; i++)
+      {
+        if(entityList[i].owner == OWNER_PLAYER_A)
+          break
+        else if(i == entityList.length -1)
+        {
+          return true;
+        }
+      };
     };
     
     this.takeInput = function(p1Keys, p2Keys)
     {
-      
-      if(p1Keys.left())
-        entityList[0].physicsBody.moveLeft();
-      else if(p1Keys.right())
-        entityList[0].physicsBody.moveRight();
-      if(p1Keys.A())
-        entityList[0].physicsBody.jump();
+      if(this.isGameFinished())
+        return;
+      for(var index in entityList)
+      {
+        if(entityList[index].owner == OWNER_PLAYER_A)
+        {
+          if(p1Keys.left())
+            entityList[index].physicsBody.moveLeft();
+          else if(p1Keys.right())
+            entityList[index].physicsBody.moveRight();
+          if(p1Keys.up() || p1Keys.A())
+            entityList[index].physicsBody.jump();
+        }
+        else if(entityList[index].owner == OWNER_PLAYER_B)
+        {
+          if(p2Keys.left())
+            entityList[index].physicsBody.moveLeft();
+          else if(p2Keys.right())
+            entityList[index].physicsBody.moveRight();
+          if(p2Keys.up() || p2Keys.A())
+            entityList[index].physicsBody.jump();
+        }
+      }
     };
     this.update = function() {
       this.physicsManager.update(entityList);
@@ -156,6 +209,9 @@ define(function(require) {
     };
     this.draw = function() {
       this.renderManager.render(entityList, Math.ceil(this._timeLeft() / 1000));
+      if(this.isGameFinished())
+        wideCanvas.ctx.fillStyle = "#e00";
+
     };
     // takes the entity to be converted and its new owner value
     this.convertEntity  = function(entity, newOwner)
@@ -165,7 +221,12 @@ define(function(require) {
     };
     this.entityJumpsOn = function(base, target)
     {
-      this.convertEntity(entityList[target], entityList[base].owner);
+      console.log("entity jumps on "+base + " " + target);
+      if(entityList[base].owner != entityList[target].owner && entityList[base].owner != OWNER_NPC)
+      {
+        entityList[base].physicsBody.jump();
+        this.convertEntity(entityList[target], entityList[base].owner);
+      }
     }
 
     this._createEntity  = function(physicsOpts, owner) {
@@ -198,15 +259,15 @@ define(function(require) {
       switch (owner)
       {
         case OWNER_PLAYER_A:
-          imagePath = "app/img/playerA.png";
+          imagePath = "app/img/appdemon.png";
           break;
         
         case OWNER_PLAYER_B:
-          imagePath = "app/img/playerB.png";
+          imagePath = "app/img/appskull.png";
           break;
 
         case OWNER_NPC:
-          imagePath = "app/img/NPC.png";
+          imagePath = "app/img/appnpc.png";
           break;
 
         case OWNER_PLATFORM:

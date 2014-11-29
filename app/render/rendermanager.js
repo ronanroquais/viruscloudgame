@@ -1,5 +1,6 @@
-define(function() {
+define(function(require) {
 	var settings = require('settings');
+	var mediaAssets = require('mediaAssets');
 
 	var RenderManager	= function()
 	{
@@ -18,14 +19,18 @@ define(function() {
 			this._renderBg();
 			this._renderEntities(entityList);
 			// this._renderEntitiesDEBUG(entityList);
-			this._renderTime(time);
+//			this._renderTime(time);
 		};
 
 
 		this._renderBg			= function()
 		{
+			/*
 			this.canvas.ctx.fillStyle= "#222";
 			this.canvas.ctx.fillRect(settings.width/2 - 4, 0, 8, settings.height)
+			*/
+			this.canvas.ctx.drawImage(mediaAssets.white, 0,0);
+
 		};
 
 		this._renderEntities	= function(entityList)

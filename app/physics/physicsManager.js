@@ -3,6 +3,7 @@ define(function(require) {
   {
     var MathUtils = require('lib/MathUtils');
     var settings = require('settings');
+    var wideCanvas = require('lib/wideCanvas');
     this.init =function(gameState)
     {
 
@@ -53,7 +54,7 @@ define(function(require) {
 
         if(entities[base].physicsBody.isFixed)
           continue;
-        
+
         baseRect = {
           x : entities[base].physicsBody.x - entities[base].physicsBody.width/2,
           y : entities[base].physicsBody.y,
@@ -66,6 +67,8 @@ define(function(require) {
         }
 //        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
 
+        var willJump = false;
+        
         for(target = 0; target < entities.length ; target++)
         {
           if(base == target)
@@ -104,11 +107,27 @@ define(function(require) {
             }
             else
             {
+              if(baseRect.y >= targetRect.y+targetRect.height/2)
+              {
+                var lol = baseRect.x - targetRect.x;
+              
+                if(baseRect.velocityY < 0 && Math.abs(baseRect.x - targetRect.x) < baseRect.width && entities[base].owner != entities[target].owner)
+                {
+                  willJump = true;
+                }
+                else
+                {
+                  wideCanvas.ctx.strokeRect(baseRect.x, baseRect.y, baseRect.width, baseRect.height);
+                  wideCanvas.ctx.strokeRect(targetRect.x, targetRect.y, targetRect.width, targetRect.height);
+                  console.log(lol + " " + baseRect.width);
+                }
+              }
+
               baseRect.x -= overlappingPoint.x/2;
               //baseRect.y -= overlappingPoint.y/2;
               targetRect.x += overlappingPoint.x/2;
               //targetRect.y += overlappingPoint.y/2;
-              if(baseRect.y > targetRect.y+targetRect.height/2 && overlappingPoint.x < baseRect.width/2)
+              if(willJump)
               {
                 gameState.entityJumpsOn(base, target);
               }
@@ -119,10 +138,15 @@ define(function(require) {
         }
         entities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
         entities[base].physicsBody.y = baseRect.y;
+        entities[base].physicsBody.canJump = baseRect.canJump;
         entities[base].physicsBody.velocityX = baseRect.velocityX;
         entities[base].physicsBody.velocityY = baseRect.velocityY;
-        entities[base].physicsBody.canJump = baseRect.canJump;
 
+        if(willJump)
+        {
+          entities[base].physicsBody.canJump = true;
+          entities[base].physicsBody.jump();
+        }
       }
     }
   };

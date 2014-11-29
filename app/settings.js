@@ -9,7 +9,7 @@ define(function(require) {
     solidPlayers : true,
     gravity : -6,
     canvasColor : "#222",
-    backgroundColor : "#B0B0B0",
+    backgroundColor : "#228022",
     jumpVelocity : 30,
     runVelocity : 8
   };
