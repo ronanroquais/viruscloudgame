@@ -17,7 +17,8 @@ define(function(require){
     this.velocityX = 0;
     this.velocityY = 0;
     this.accelerationX = 0.0;
-    this.accelerationY = settings.gravity;
+    this.isFixed = options.isFixed ? true : false;
+    this.accelerationY = this.isFixed ? 0 : settings.gravity;
     this.maxVelocityX = 20;
     this.maxVelocityY = 20;
     this.canJump = true;
@@ -41,9 +42,7 @@ define(function(require){
     {
       if(this.canJump || jumpStart < 3)
       {
-        if(!this.canJump)
-          jumpStart++;
-        else 
+        if(this.canJump)
           jumpStart = 0;
         this.canJump = false;
         this.velocityY = settings.jumpVelocity;
@@ -52,6 +51,8 @@ define(function(require){
 
     this.update = function()
     {
+      if(jumpStart < 3)
+        jumpStart++;
       this.x += this.velocityX;
       this.y += this.velocityY;
       var tmpVX = this.velocityX + this.accelerationX;
