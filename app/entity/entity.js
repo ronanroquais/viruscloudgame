@@ -11,7 +11,7 @@ define(function(require) {
 		this.init		= function()
 		{
 			this.life	= 1.0;
-		}
+		};
 
 		this.update	= function(time)
 		{

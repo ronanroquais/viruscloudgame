@@ -33,6 +33,7 @@ define(function(){
       else return -1 * getXSizeOfOverlap(secondRect, firstRect);
     },
     getXLeftRightSizeOfOverlap : function(leftRect, rightRect)
+    {
       var maxLeft = Math.max(leftRect.x, rightRect.x);
       var minRight = Math.min(leftRect.x+leftRect.width, rightRect.x+rightRect.width);
       var result = minRight - maxLeft;
@@ -63,7 +64,7 @@ define(function(){
         x: getXSizeOfOverlap(firstRect, secondRect),
         y: getYSizeOfOverlap(firstRect, secondRect)
       }
-    }
+    },
     // Thales <3
     getYFromXOnLineFormedByTwoPoints : function(wantedX, originX, originY, destX, destY)
     {

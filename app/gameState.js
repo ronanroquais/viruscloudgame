@@ -5,18 +5,32 @@ define(function(require) {
   var settings = require('settings');
   var Jar = require('jar');
   var levels = require('levels');
+  var PhysicsBody = require('physics/physicsBody');
 
   var Entity = require('entity/entity');
+  var RenderManager = require('render/rendermanager');
 
   var GameState = function(gameCallbacks)
   {
+    var renderManager;
+
     var entityList  = [];
 
     this.init = function() {
+      this.renderManager = new RenderManager();
+      this.renderManager.init(wideCanvas);
+
       entityList.push(new Entity());
 
       entityList.forEach(function(e) {
         e.init();
+
+        e.physicsBody = new PhysicsBody({
+          x:5.0,
+          y:1.0,
+          width:10,
+          height:10
+        });
       });
     };
     
@@ -39,9 +53,7 @@ define(function(require) {
 
     };
     this.draw = function() {
-      wideCanvas.clear();
-      wideCanvas.ctx.fillStyle= "#222";
-      wideCanvas.ctx.fillRect(settings.width/2 - 4, 0, 8, settings.height)
+      this.renderManager.render(entityList);
     };
     this.init(); // constructor call
   };
