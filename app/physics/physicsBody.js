@@ -13,7 +13,7 @@ define(function(require){
     this.x = options.x;
     this.y = options.y;
     this.width = options.width || 32;
-    this.height = options.width || 48;
+    this.height = options.height || 48;
     this.velocityX = 0;
     this.velocityY = 0;
     this.accelerationX = 0.0;
