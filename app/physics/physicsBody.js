@@ -4,8 +4,13 @@ define(function(require){
 
   var PhysicsBody = function(options)
   {
-    this.x = options.x || settings.width/2;
-    this.y = options.y || settings.height/4;
+    options = options || {};
+    if(options.x == undefined)
+      options.x = settings.width/2;
+    if(options.y == undefined)
+      options.y = settings.height/4;
+    this.x = options.x;
+    this.y = options.y;
     this.width = options.width || 32;
     this.height = options.width || 48;
     this.velocityX = 0;
