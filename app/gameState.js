@@ -36,7 +36,6 @@ define(function(require) {
       // create first player
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
           { x:100, y:200, width:32, height:32 },
           OWNER_PLAYER_A
         )
@@ -45,79 +44,76 @@ define(function(require) {
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_PLAYER_B
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
 
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
       // NPC
       entityList.push(
         this._createEntity(
-          "app/img/playerA.png",
-          { x:600, y:200, width:32, height:32 }
+          { x:600, y:200, width:32, height:32 },
+          OWNER_NPC
         )
       );
 
       // create test platform
       entityList.push(
         this._createEntity(
-          "app/img/platformTile.png",
           { x:300, y:100, width:100, height:20, isFixed:true }
         )
       );
       // create test platform
       entityList.push(
         this._createEntity(
-          "app/img/platformTile.png",
           { x:500, y:50, width:100, height:20, isFixed:true }
         )
       );
       // create test platform
       entityList.push(
         this._createEntity(
-          "app/img/platformTile.png",
           { x:150, y:200, width:100, height:20, isFixed:true },
           OWNER_PLATFORM
         )
@@ -125,7 +121,6 @@ define(function(require) {
       // create test platform
       entityList.push(
         this._createEntity(
-          "app/img/platformTile.png",
           { x:400, y:150, width:100, height:20, isFixed:true },
           OWNER_PLATFORM
         )
@@ -144,6 +139,7 @@ define(function(require) {
     
     this.takeInput = function(p1Keys, p2Keys)
     {
+      
       if(p1Keys.left())
         entityList[0].physicsBody.moveLeft();
       else if(p1Keys.right())
@@ -169,15 +165,16 @@ define(function(require) {
     };
     this.entityJumpsOn = function(base, target)
     {
-      console.log(base + " jumps on " + target);
+      this.convertEntity(entityList[target], entityList[base].owner);
     }
 
-    this._createEntity  = function(imagePath, physicsOpts, owner) {
+    this._createEntity  = function(physicsOpts, owner) {
       var entity    = new Entity();
+      owner = owner || OWNER_PLATFORM;
 
       entity.init();
 
-      this._setEntityImage(entity, imagePath);
+      this._setEntityImage(entity, this._getImgFromOwner(owner));
 
       entity.physicsBody  = new PhysicsBody(physicsOpts);
       entity.owner        = owner;
@@ -208,9 +205,9 @@ define(function(require) {
           imagePath = "app/img/playerB.png";
           break;
 
-/*        case OWNER_NPC:
-          imagePath = "app/img/playerA.png";
-          break;*/
+        case OWNER_NPC:
+          imagePath = "app/img/NPC.png";
+          break;
 
         case OWNER_PLATFORM:
           imagePath = "app/img/platformTile.png";
