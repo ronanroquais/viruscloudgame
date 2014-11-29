@@ -32,11 +32,19 @@ define(function(require) {
         )
       );
 
+      // NPC
+      entityList.push(
+        this._createEntity(
+          "app/img/playerA.png",
+          { x:600, y:200, width:10, height:10 }
+        )
+      );
+
       // create test platform
       entityList.push(
         this._createEntity(
           "app/img/platformTile.png",
-          { x:300, y:300, width:100, height:20, isFixed:true }
+          { x:300, y:100, width:100, height:20, isFixed:true }
         )
       );
     };
