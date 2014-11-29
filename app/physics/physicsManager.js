@@ -24,12 +24,23 @@ define(function(require) {
         if(entities[base].physicsBody.isFixed)
           continue;
 
+        baseRect = {
+          x : entities[base].physicsBody.x - entities[base].physicsBody.width/2,
+          y : entities[base].physicsBody.y,
+          width : entities[base].physicsBody.width,
+          height : entities[base].physicsBody.height,
+          canJump : entities[base].physicsBody.canJump,
+          velocityX : entities[base].physicsBody.velocityX,
+          velocityY : entities[base].physicsBody.velocityY,
+          isFixed : entities[base].physicsBody.isFixed
+        }
+        
         //var canvasOverlapping = MathUtils.getXYSizeOfOverlap(entities[base].physicsBody, {x:0, y:0, width:settings.width, height: settings.height});
-        entities[base].physicsBody.x = MathUtils.minMax(entities[base].physicsBody.x, 0, settings.width - entities[base].physicsBody.width);
-        if(entities[base].physicsBody.y < 0)
+        baseRect.x = MathUtils.minMax(baseRect.x, 0, settings.width);
+        if(baseRect.y < 0)
         {
-          entities[base].physicsBody.y = 0;
-          entities[base].physicsBody.canJump = true;
+          baseRect.y = 0;
+          baseRect.canJump = true;
         }
 //        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
 
@@ -37,34 +48,54 @@ define(function(require) {
         {
           if(base == target)
             continue;
-          
-          if(MathUtils.areRectanglesColliding(entities[base].physicsBody, entities[target].physicsBody))
+          targetRect = {
+            x : entities[target].physicsBody.x - entities[target].physicsBody.width/2,
+            y : entities[target].physicsBody.y,
+            width : entities[target].physicsBody.width,
+            height : entities[target].physicsBody.height,
+            isFixed : entities[target].physicsBody.isFixed
+          }
+          console.log(entities[base].physicsBody);
+          console.log(baseRect);
+          console.log(entities[target].physicsBody);
+          console.log(targetRect);
+          if(MathUtils.areRectanglesColliding(baseRect, targetRect))
           {
-            var overlappingPoint = MathUtils.getXYSizeOfOverlap(entities[base].physicsBody, entities[target].physicsBody);
-            if(entities[target].physicsBody.isFixed)
+            var overlappingPoint = MathUtils.getXYSizeOfOverlap(baseRect, targetRect);
+            if(targetRect.isFixed)
             {
               if(Math.abs(overlappingPoint.x) > 0)
               {
-                entities[base].physicsBody.velocityX = 0;
-                entities[base].physicsBody.x -= overlappingPoint.x;
+                baseRect.velocityX = 0;
+                baseRect.x -= overlappingPoint.x;
               }
               if(Math.abs(overlappingPoint.y) > 0)
               {
-                entities[base].physicsBody.velocityY = 0;
-                entities[base].physicsBody.y -= overlappingPoint.y;
-                if(entities[base].physicsBody.y > entities[target].physicsBody.y)
+                baseRect.velocityY = 0;
+                baseRect.y -= overlappingPoint.y;
+                if(baseRect.y > targetRect.y)
                 {
-                  entities[base].physicsBody.canJump = true;
+                  baseRect.canJump = true;
                 }
               }
             }
             else
             {
-              entities[base].physicsBody.x -= overlappingPoint.x/2;
-              entities[base].physicsBody.y -= overlappingPoint.y/2;
+              baseRect.x -= overlappingPoint.x/2;
+              baseRect.y -= overlappingPoint.y/2;
+              targetRect.x += overlappingPoint.x/2;
+              targetRect.y += overlappingPoint.y/2;
             }
           }
+          entities[target].physicsBody.x = targetRect.x + entities[target].physicsBody.width/2;
+          entities[target].physicsBody.y = targetRect.y;
         }
+        entities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
+        entities[base].physicsBody.y = baseRect.y;
+        entities[base].physicsBody.velocityX = baseRect.velocityX;
+        entities[base].physicsBody.velocityY = baseRect.velocityY;
+        entities[base].physicsBody.canJump = baseRect.canJump;
+
       }
     }
   };
