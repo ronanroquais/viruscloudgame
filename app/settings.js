@@ -1,7 +1,7 @@
 define(function(require) {
   'use strict';
   var settings = {
-    version : 0.4,
+    version : 0.1,
     width : 800,
     height : 400,
     canvasId : "c",
