@@ -1,0 +1,34 @@
+{
+  "name": "viruscloudgame",
+  "description": "",
+  "version": "0.0.0",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt qunit"
+  },
+  "author": {
+    "name": "Ronan Roquais",
+    "email": "rroquais@gmail.com",
+    "url": "http://shinmugen.net/"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://mit-license.org"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-qunit": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-requirejs": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-newer": "~0.6.1"
+  }
+}
