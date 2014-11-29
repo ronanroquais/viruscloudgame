@@ -29,8 +29,8 @@ define(function(){
     getXSizeOfOverlap : function(firstRect, secondRect)
     {
       if(firstRect.x < secondRect.x)
-        return getXSizeOfOverlap(firstRect, secondRect);
-      else return -1 * getXSizeOfOverlap(secondRect, firstRect);
+        return MathUtils.getXLeftRightSizeOfOverlap(firstRect, secondRect);
+      else return -1 * MathUtils.getXLeftRightSizeOfOverlap(secondRect, firstRect);
     },
     getXLeftRightSizeOfOverlap : function(leftRect, rightRect)
     {
@@ -46,14 +46,14 @@ define(function(){
     getYSizeOfOverlap : function(firstRect, secondRect)
     {
       if(firstRect.y < secondRect.y)
-        return getYSizeOfOverlap(firstRect, secondRect);
-      else return -1 * getYSizeOfOverlap(secondRect, firstRect);
+        return MathUtils.getYTopBottomSizeOfOverlap(firstRect, secondRect);
+      else return -1 * MathUtils.getYTopBottomSizeOfOverlap(secondRect, firstRect);
     },
     getYTopBottomSizeOfOverlap : function(bottomRect, topRect)
     {
       var maxBottom = Math.max(bottomRect.y, topRect.y);
       var minTop = Math.min(bottomRect.y+bottomRect.height, topRect.y+topRect.height);
-      var result = maxTop - minBottom;
+      var result = minTop - maxBottom;
       if(result > 0)
         return result;
       return 0;
@@ -61,8 +61,8 @@ define(function(){
     getXYSizeOfOverlap : function(firstRect, secondRect)
     {
       return {
-        x: getXSizeOfOverlap(firstRect, secondRect),
-        y: getYSizeOfOverlap(firstRect, secondRect)
+        x: MathUtils.getXSizeOfOverlap(firstRect, secondRect),
+        y: MathUtils.getYSizeOfOverlap(firstRect, secondRect)
       }
     },
     // Thales <3
@@ -79,7 +79,7 @@ define(function(){
     },
     minMax : function(value, min, max)
     {
-      return Math.min(max, Math.min(max, value));
+      return Math.min(max, Math.max(min, value));
     }
   };
   return MathUtils;
