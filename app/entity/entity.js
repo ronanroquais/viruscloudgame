@@ -1,6 +1,7 @@
 define(function(require) {
 	var Entity	= function()
 	{
+		this.owner;
 		// physics body object
 		this.physicsBody;
 		// Image object

@@ -13,6 +13,11 @@ define(function(require) {
 
   var GameState = function(gameCallbacks)
   {
+    var OWNER_PLAYER_A  = "owner_player_a";
+    var OWNER_PLAYER_B  = "owner_player_b";
+    var OWNER_NPC       = "owner_npc";
+    var OWNER_PLATFORM  = "owner_platform";
+
     var renderManager;
     var physicsManager;
 
@@ -32,7 +37,8 @@ define(function(require) {
       entityList.push(
         this._createEntity(
           "app/img/playerA.png",
-          { x:100, y:200, width:10, height:20 }
+          { x:100, y:200, width:10, height:20 },
+          OWNER_PLAYER_A
         )
       );
 
@@ -40,7 +46,8 @@ define(function(require) {
       entityList.push(
         this._createEntity(
           "app/img/platformTile.png",
-          { x:300, y:300, width:100, height:20, isFixed:true }
+          { x:300, y:300, width:100, height:20, isFixed:true },
+          OWNER_PLATFORM
         )
       );
 
@@ -54,7 +61,7 @@ define(function(require) {
     this.isGameFinished = function() 
     {
     };
-      
+    
     this.takeInput = function(p1Keys, p2Keys)
     {
       if(p1Keys.left())
@@ -72,25 +79,62 @@ define(function(require) {
       this.physicsManager.checkCollision(entityList)
     };
     this.draw = function() {
-      console.log("this._timeLeft() = " + this._timeLeft());
       this.renderManager.render(entityList, Math.ceil(this._timeLeft() / 1000));
     };
+    // takes the entity to be converted and its new owner value
+    this.convertEntity  = function(entity, newOwner)
+    {
+      this._setEntityImage(entity, this._getImgFromOwner(newOwner));
+      entity.owner  = newOwner;
+    };
 
-    this._createEntity  = function(imagePath, physicsOpts) {
+    this._createEntity  = function(imagePath, physicsOpts, owner) {
       var entity    = new Entity();
 
       entity.init();
 
+      this._setEntityImage(entity, imagePath);
+
+      entity.physicsBody  = new PhysicsBody(physicsOpts);
+      entity.owner        = owner;
+
+      return entity;
+    };
+
+    this._setEntityImage  = function(entity, imagePath)
+    {
       var image       = new Image();
       image.onload    = function() {
         entity.image  = image;
       };
       image.src       = imagePath;
-
-      entity.physicsBody  = new PhysicsBody(physicsOpts);
-
-      return entity;
     };
+
+    this._getImgFromOwner = function(owner)
+    {
+      var imagePath;
+
+      switch (owner)
+      {
+        case OWNER_PLAYER_A:
+          imagePath = "app/img/playerA.png";
+          break;
+        
+        case OWNER_PLAYER_B:
+          imagePath = "app/img/playerB.png";
+          break;
+
+/*        case OWNER_NPC:
+          imagePath = "app/img/playerA.png";
+          break;*/
+
+        case OWNER_PLATFORM:
+          imagePath = "app/img/platformTile.png";
+          break;
+      }
+
+      return imagePath;
+    }
 
     this._timeElapsed = function()
     {
