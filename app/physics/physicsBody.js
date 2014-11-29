@@ -20,6 +20,8 @@ define(function(require){
     this.accelerationY = settings.gravity;
     this.maxVelocityX = 20;
     this.maxVelocityY = 20;
+    this.canJump = true;
+    var jumpStart =0;
 
     var minRounding = 0.1;
     this.init = function(options)
@@ -37,7 +39,15 @@ define(function(require){
     }
     this.jump = function()
     {
-      this.velocityY = settings.jumpVelocity;
+      if(this.canJump || jumpStart < 3)
+      {
+        if(!this.canJump)
+          jumpStart++;
+        else 
+          jumpStart = 0;
+        this.canJump = false;
+        this.velocityY = settings.jumpVelocity;
+      }
     }
 
     this.update = function()
@@ -57,9 +67,10 @@ define(function(require){
       if(Math.abs(tmpVY) < minRounding)
         tmpVY = 0;
       this.velocityY = tmpVY;
-      if(Math.abs(this.accelerationY) < minRounding)
-        this.accelerationY = 0
-      else this.accelerationY /= 2;
+      //no need to tweak gravity :>
+      //if(Math.abs(this.accelerationY) < minRounding)
+      //  this.accelerationY = 0
+      //else this.accelerationY /= 2;
     }
   }
 

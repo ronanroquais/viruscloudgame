@@ -26,7 +26,12 @@ define(function(require) {
 
         //var canvasOverlapping = MathUtils.getXYSizeOfOverlap(entities[base].physicsBody, {x:0, y:0, width:settings.width, height: settings.height});
         entities[base].physicsBody.x = MathUtils.minMax(entities[base].physicsBody.x, 0, settings.width - entities[base].physicsBody.width);
-        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
+        if(entities[base].physicsBody.y < 0)
+        {
+          entities[base].physicsBody.y = 0;
+          entities[base].physicsBody.canJump = true;
+        }
+//        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
 
         for(target = 0; target < entities.length ; target++)
         {
@@ -46,7 +51,11 @@ define(function(require) {
               if(Math.abs(overlappingPoint.y) > 0)
               {
                 entities[base].physicsBody.velocityY = 0;
-                entities[base].physicsBody.y -= overlappingPoint.y;              
+                entities[base].physicsBody.y -= overlappingPoint.y;
+                if(entities[base].physicsBody.y > entities[target].physicsBody.y)
+                {
+                  entities[base].physicsBody.canJump = true;
+                }
               }
             }
             else

@@ -57,6 +57,8 @@ define(function(require) {
         entityList[0].physicsBody.moveLeft();
       else if(p1Keys.right())
         entityList[0].physicsBody.moveRight();
+      if(p1Keys.A())
+        entityList[0].physicsBody.jump();
     };
     this.update = function() {
       this.physicsManager.update(entityList);

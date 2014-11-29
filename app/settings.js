@@ -10,9 +10,8 @@ define(function(require) {
     gravity : -6,
     canvasColor : "#222",
     backgroundColor : "#B0B0B0",
-    jumpVelocity : 80,
-    runVelocity : 5,
-    fallSpeed : 5
+    jumpVelocity : 30,
+    runVelocity : 8
   };
   //helpers
   settings.hCenter = settings.width/2;
