@@ -20,8 +20,10 @@ define(function(require) {
     {
       var base;
       var target;
+      var nextEntities = [];
       for(base = 0; base < entities.length; base++)
       {
+        nextEntities.push(entities[base]);
         if(entities[base].physicsBody.isFixed)
           continue;
 
@@ -43,13 +45,13 @@ define(function(require) {
           baseRect.y = 0;
           baseRect.canJump = true;
         }
-        entities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
-        entities[base].physicsBody.y = baseRect.y;
-        entities[base].physicsBody.velocityX = baseRect.velocityX;
-        entities[base].physicsBody.velocityY = baseRect.velocityY;
-        entities[base].physicsBody.canJump = baseRect.canJump;
+        nextEntities[base].physicsBody.x = baseRect.x + nextEntities[base].physicsBody.width/2;
+        nextEntities[base].physicsBody.y = baseRect.y;
+        nextEntities[base].physicsBody.velocityX = baseRect.velocityX;
+        nextEntities[base].physicsBody.velocityY = baseRect.velocityY;
+        nextEntities[base].physicsBody.canJump = baseRect.canJump;
       }
-      for(base = 0; base < entities.length; base++)
+      for(base = 0; base < nextEntities.length; base++)
       {
 
         if(entities[base].physicsBody.isFixed)
@@ -107,19 +109,21 @@ define(function(require) {
             }
             else
             {
-              if(baseRect.y >= targetRect.y+targetRect.height/2)
+              if(baseRect.y >= targetRect.y+targetRect.width/2+1)
               {
                 var lol = baseRect.x - targetRect.x;
               
                 if(baseRect.velocityY < 0 && Math.abs(baseRect.x - targetRect.x) < baseRect.width && entities[base].owner != entities[target].owner)
                 {
+                  console.log(baseRect);
+                  console.log(targetRect);
                   willJump = true;
                 }
                 else
                 {
                   wideCanvas.ctx.strokeRect(baseRect.x, baseRect.y, baseRect.width, baseRect.height);
                   wideCanvas.ctx.strokeRect(targetRect.x, targetRect.y, targetRect.width, targetRect.height);
-                  console.log(lol + " " + baseRect.width);
+                  //console.log(lol + " " + baseRect.width);
                 }
               }
 
@@ -133,20 +137,24 @@ define(function(require) {
               }
             }
           }
-          entities[target].physicsBody.x = targetRect.x + entities[target].physicsBody.width/2;
-          entities[target].physicsBody.y = targetRect.y;
+          nextEntities[target].physicsBody.x = targetRect.x + entities[target].physicsBody.width/2;
+          nextEntities[target].physicsBody.y = targetRect.y;
         }
-        entities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
-        entities[base].physicsBody.y = baseRect.y;
-        entities[base].physicsBody.canJump = baseRect.canJump;
-        entities[base].physicsBody.velocityX = baseRect.velocityX;
-        entities[base].physicsBody.velocityY = baseRect.velocityY;
+        nextEntities[base].physicsBody.x = baseRect.x + entities[base].physicsBody.width/2;
+        nextEntities[base].physicsBody.y = baseRect.y;
+        nextEntities[base].physicsBody.canJump = baseRect.canJump;
+        nextEntities[base].physicsBody.velocityX = baseRect.velocityX;
+        nextEntities[base].physicsBody.velocityY = baseRect.velocityY;
 
         if(willJump)
         {
-          entities[base].physicsBody.canJump = true;
-          entities[base].physicsBody.jump();
+          nextEntities[base].physicsBody.canJump = true;
+          nextEntities[base].physicsBody.jump();
         }
+      }
+      for(base = 0; base < entities.length; base++)
+      {
+        entities[base] = nextEntities[base];
       }
     }
   };

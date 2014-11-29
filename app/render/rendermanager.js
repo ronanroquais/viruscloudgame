@@ -65,7 +65,7 @@ define(function(require) {
 
 		this._renderTime			= function(time)
 		{
-			this.canvas.ctx.font	= "30px sans";
+			this.canvas.ctx.font	= "30px Verdana";
 			this.canvas.ctx.fillText(time, 10, 30);
 		};
 

@@ -26,6 +26,7 @@ define(function(require) {
     // times in milliseconds
     var maxTime;
     var startTime;
+    var p1wins = false;
 
     this.init = function() {
       this.renderManager = new RenderManager();
@@ -151,8 +152,8 @@ define(function(require) {
     
     this.isGameFinished = function() 
     {
-      if(this._timeLeft <= 0)
-        return true;
+//      if(this._timeLeft <= 0)
+//        return true;
 
       for (var i = 0; i < entityList.length; i++)
       {
@@ -160,6 +161,7 @@ define(function(require) {
           break
         else if(i == entityList.length -1)
         {
+          p1wins = true;
           return true;
         }
       };
@@ -169,6 +171,7 @@ define(function(require) {
           break
         else if(i == entityList.length -1)
         {
+          p1wins = false;
           return true;
         }
       };
@@ -177,7 +180,13 @@ define(function(require) {
     this.takeInput = function(p1Keys, p2Keys)
     {
       if(this.isGameFinished())
+      {
+        if(p1Keys.start() || p2Keys.start())
+        {
+          gameCallbacks.startGameState();
+        }
         return;
+      }
       for(var index in entityList)
       {
         if(entityList[index].owner == OWNER_PLAYER_A)
@@ -210,7 +219,16 @@ define(function(require) {
     this.draw = function() {
       this.renderManager.render(entityList, Math.ceil(this._timeLeft() / 1000));
       if(this.isGameFinished())
+      {
         wideCanvas.ctx.fillStyle = "#e00";
+        var text = "RED VIRUS WINS";
+        if(!p1wins)
+        {
+          text = "BLACK VIRUS WINS";
+        }
+        wideCanvas.ctx.font  = "30px Verdana";
+        wideCanvas.ctx.fillText(text, 280, 250);
+      }
 
     };
     // takes the entity to be converted and its new owner value
@@ -259,19 +277,19 @@ define(function(require) {
       switch (owner)
       {
         case OWNER_PLAYER_A:
-          imagePath = "app/img/appdemon.png";
+          imagePath = "img/appdemon.png";
           break;
         
         case OWNER_PLAYER_B:
-          imagePath = "app/img/appskull.png";
+          imagePath = "img/appskull.png";
           break;
 
         case OWNER_NPC:
-          imagePath = "app/img/appnpc.png";
+          imagePath = "img/appnpc.png";
           break;
 
         case OWNER_PLATFORM:
-          imagePath = "app/img/platformTile.png";
+          imagePath = "img/platformTile.png";
           break;
       }
 
