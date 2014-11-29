@@ -16,14 +16,14 @@ define(function(require) {
       var target;
       for(base = 0; base < entities.length; base++)
       {
-        if(entities[base].isFixed)
+        if(entities[base].physicsBody.isFixed)
           continue;
         for(target = 0; target < entities.length ; target++)
         {
           if(MathUtils.areRectanglesColliding(entities[base], entities[target]))
           {
             var overlappingPoint = MathUtils.getXYSizeOfOverlap(entities[base], entities[target]);
-            if(entities[target].isFixed)
+            if(entities[target].physicsBody.isFixed)
             {
               if(Math.abs(overlappingPoint.x) > 0)
               {
