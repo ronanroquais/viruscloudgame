@@ -28,7 +28,7 @@ define(function(require) {
       entityList.push(
         this._createEntity(
           "app/img/playerA.png",
-          { x:100, y:200, width:10, height:10 }
+          { x:100, y:200, width:10, height:20 }
         )
       );
 

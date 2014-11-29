@@ -51,7 +51,7 @@ define(function() {
 					}
 					else
 					{
-						this.canvas.ctx.drawImage(image, drawX, drawY);
+						this.canvas.ctx.drawImage(image, drawX, drawY, physicsBody.width, physicsBody.height);
 					}
 				}
 			}.bind(this));
