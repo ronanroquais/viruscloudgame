@@ -10,7 +10,8 @@ define(function(require) {
     gravity : -10,
     canvasColor : "#222",
     backgroundColor : "#B0B0B0",
-    winningRounds : 2,
+    jumpVelocity : 80,
+    runVelocity : 5,
     fallSpeed : 5
   };
   //helpers
