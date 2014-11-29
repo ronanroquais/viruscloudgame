@@ -11,13 +11,14 @@ define(function() {
 			this.canvas	= canvas;
 		};
 
-		this.render	= function(entityList)
+		this.render	= function(entityList, time)
 		{
 			this.canvas.clear();
 
 			this._renderBg();
 			this._renderEntities(entityList);
 			// this._renderEntitiesDEBUG(entityList);
+			this._renderTime(time);
 		};
 
 
@@ -55,6 +56,12 @@ define(function() {
 					}
 				}
 			}.bind(this));
+		};
+
+		this._renderTime			= function(time)
+		{
+			this.canvas.ctx.font	= "30px sans";
+			this.canvas.ctx.fillText(time, 10, 30);
 		};
 
 		this._renderEntitiesDEBUG	= function(entityList)

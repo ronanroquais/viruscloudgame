@@ -18,6 +18,10 @@ define(function(require) {
 
     var entityList  = [];
 
+    // times in milliseconds
+    var maxTime;
+    var startTime;
+
     this.init = function() {
       this.renderManager = new RenderManager();
       this.renderManager.init(wideCanvas);
@@ -39,6 +43,9 @@ define(function(require) {
           { x:300, y:300, width:100, height:20, isFixed:true }
         )
       );
+
+      this.startTime  = Date.now();
+      this.maxTime    = 30000;
     };
     
     this.initRound = function() {
@@ -65,7 +72,8 @@ define(function(require) {
       this.physicsManager.checkCollision(entityList)
     };
     this.draw = function() {
-      this.renderManager.render(entityList);
+      console.log("this._timeLeft() = " + this._timeLeft());
+      this.renderManager.render(entityList, Math.ceil(this._timeLeft() / 1000));
     };
 
     this._createEntity  = function(imagePath, physicsOpts) {
@@ -83,6 +91,18 @@ define(function(require) {
 
       return entity;
     };
+
+    this._timeElapsed = function()
+    {
+      return Date.now() - this.startTime;
+    }
+
+    this._timeLeft    = function()
+    {
+      var left  = this.maxTime - this._timeElapsed();
+      return left > 0 ? left : 0;
+    };
+
     this.init(); // constructor call
   };
   return GameState;
