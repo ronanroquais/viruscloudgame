@@ -2,15 +2,20 @@ define(function(require) {
   var PhysicsManager = function()
   {
     var MathUtils = require('lib/MathUtils');
-    function update(entities)
+    var settings = require('settings');
+    this.init =function()
     {
-      for(var i in entities)
-      {
-        entities[i].update();
-      }
+
+    };
+    
+    this.update = function(entities)
+    {
+      entities.forEach(function(e) {
+        e.update();
+      });
     }
 
-    function checkCollision(entities)
+    this.checkCollision = function(entities)
     {
       var base;
       var target;
@@ -18,11 +23,19 @@ define(function(require) {
       {
         if(entities[base].physicsBody.isFixed)
           continue;
+
+        //var canvasOverlapping = MathUtils.getXYSizeOfOverlap(entities[base].physicsBody, {x:0, y:0, width:settings.width, height: settings.height});
+        entities[base].physicsBody.x = MathUtils.minMax(entities[base].physicsBody.x, 0, settings.width - entities[base].physicsBody.width);
+        entities[base].physicsBody.y = MathUtils.minMax(entities[base].physicsBody.y, 0, settings.height + 400 - entities[base].physicsBody.height);
+
         for(target = 0; target < entities.length ; target++)
         {
-          if(MathUtils.areRectanglesColliding(entities[base], entities[target]))
+          if(base == target)
+            continue;
+          
+          if(MathUtils.areRectanglesColliding(entities[base].physicsBody, entities[target].physicsBody))
           {
-            var overlappingPoint = MathUtils.getXYSizeOfOverlap(entities[base], entities[target]);
+            var overlappingPoint = MathUtils.getXYSizeOfOverlap(entities[base].physicsBody, entities[target].physicsBody);
             if(entities[target].physicsBody.isFixed)
             {
               if(Math.abs(overlappingPoint.x) > 0)

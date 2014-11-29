@@ -1,6 +1,7 @@
 define(function(require){
   'use strict';
   var settings = require('settings');
+  var MathUtils = require('lib/MathUtils');
 
   var PhysicsBody = function(options)
   {
@@ -15,10 +16,11 @@ define(function(require){
     this.height = options.width || 48;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.accelerationX = 0.1;
+    this.accelerationX = 0.0;
     this.accelerationY = settings.gravity;
     this.maxVelocityX = 20;
     this.maxVelocityY = 20;
+
     var minRounding = 0.1;
     this.init = function(options)
     {
@@ -26,10 +28,12 @@ define(function(require){
     this.moveLeft = function ()
     {
       this.velocityX = -settings.runVelocity;
+      this.accelerationX = -this.velocityX/2;
     }
     this.moveRight = function ()
     {
       this.velocityX = settings.runVelocity;
+      this.accelerationX = -this.velocityX/2;
     }
     this.jump = function()
     {
@@ -45,11 +49,17 @@ define(function(require){
       if(Math.abs(tmpVX) < minRounding)
         tmpVX = 0;
       this.velocityX = tmpVX;
-      var tmpVX = this.velocityY + this.accelerationY;
-      tmpVY = MathUtils.minMax(tmpVX, -this.maxVelocityY, this.maxVelocityY);
+      if(Math.abs(this.accelerationX) < minRounding)
+        this.accelerationX = 0
+      else this.accelerationX /= 2;
+      var tmpVY = this.velocityY + this.accelerationY;
+      tmpVY = MathUtils.minMax(tmpVY, -this.maxVelocityY, this.maxVelocityY);
       if(Math.abs(tmpVY) < minRounding)
         tmpVY = 0;
       this.velocityY = tmpVY;
+      if(Math.abs(this.accelerationY) < minRounding)
+        this.accelerationY = 0
+      else this.accelerationY /= 2;
     }
   }
 

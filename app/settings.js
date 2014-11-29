@@ -7,7 +7,7 @@ define(function(require) {
     canvasId : "c",
     fps : 30,
     solidPlayers : true,
-    gravity : -10,
+    gravity : -6,
     canvasColor : "#222",
     backgroundColor : "#B0B0B0",
     jumpVelocity : 80,
