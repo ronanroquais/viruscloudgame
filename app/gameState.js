@@ -6,10 +6,18 @@ define(function(require) {
   var Jar = require('jar');
   var levels = require('levels');
 
+  var Entity = require('entity/entity');
+
   var GameState = function(gameCallbacks)
   {
+    var entityList  = [];
 
     this.init = function() {
+      entityList.push(new Entity());
+
+      entityList.forEach(function(e) {
+        e.init();
+      });
     };
     
     this.initRound = function() {
@@ -23,7 +31,9 @@ define(function(require) {
     {
     };
     this.update = function() {
-      
+      entityList.forEach(function(e) {
+        e.update();
+      });
     };
     this.checkCollision = function () {
 
@@ -35,5 +45,5 @@ define(function(require) {
     };
     this.init(); // constructor call
   };
-  return VersusGameState;
+  return GameState;
 });
