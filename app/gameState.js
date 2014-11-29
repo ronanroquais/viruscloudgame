@@ -26,8 +26,8 @@ define(function(require) {
         e.init();
 
         e.physicsBody = new PhysicsBody({
-          x:5.0,
-          y:1.0,
+          x:0,
+          y:0,
           width:10,
           height:10
         });
