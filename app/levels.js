@@ -1,46 +1,115 @@
-define(function()
+'use strict';
+var settings = require("./settings");
+var Levels = function ()
 {
-    var allowedValues = [1,2,4,1,2,4,1,2,4,1,2,4,3,5,6,3,5,6,7];
-    var beginnerValues = [1,2,4];
-	var levels = {
-		story: [],
-		endless: [],
-		versus: []
-	};
-	var StoryLevel = function(options) {
-		if(!options)
-			options = {};
-		this.startingLines = options.startingLines || 0;
-		this.movableBlocks = options.movableBlocks || allowedValues;
-		this.penaltyBlocks = options.penaltyBlocks || allowedValues;
-		this.speed = options.speed || 1;
-		this.target = options.target || 1000;
-	}
-	var EndlessLevel = function(options)
-	{
-		if(!options)
-			options = {};
-		this.movableBlocks = options.movableBlocks || allowedValues;
-		this.penaltyBlocks = options.penaltyBlocks || allowedValues;
-		this.speed = options.speed || 1;
-	}
-	levels.story.push(new StoryLevel({movableBlocks:beginnerValues, target: 100}));
-	levels.story.push(new StoryLevel({movableBlocks:beginnerValues, target: 200, startingLines: 2}));
-	levels.story.push(new StoryLevel({movableBlocks:beginnerValues, target: 400, startingLines: 3}));
-	levels.story.push(new StoryLevel({movableBlocks:beginnerValues, target: 400, startingLines: 5}));
-	levels.story.push(new StoryLevel({movableBlocks:allowedValues, target: 200}));
-	levels.story.push(new StoryLevel({movableBlocks:allowedValues, target: 400, startingLines: 2}));
-	levels.story.push(new StoryLevel({movableBlocks:allowedValues, speed: 1.5, target: 200}));
 
-	levels.endless.push(new EndlessLevel({movableBlocks: beginnerValues}));
-	levels.endless.push(new EndlessLevel({movableBlocks: beginnerValues, speed: 1.3}));
-	levels.endless.push(new EndlessLevel({movableBlocks: beginnerValues, speed: 1.6}));
-	levels.endless.push(new EndlessLevel());
-	levels.endless.push(new EndlessLevel({speed : 1.3}));
-	levels.endless.push(new EndlessLevel({speed : 1.6}));
+  var levelsContent = [
+    [
+      { x:100, y:200, owner: settings.OWNER_PLAYER_A },
+      { x:700, y:200, owner: settings.OWNER_PLAYER_B },
+      { x:400, y:200, owner: settings.OWNER_PLAYER_C },
 
-	levels.versus.push(new EndlessLevel({movableBlocks:beginnerValues}));
-	levels.versus.push(new EndlessLevel());
-	levels.versus.push(new EndlessLevel({speed: 1.3}));
-	return levels;
-});
+      { x:400, y:100, owner: settings.OWNER_NPC },
+      { x:400, y:400, owner: settings.OWNER_NPC },
+      { x:500, y:300, owner: settings.OWNER_NPC },
+      { x:300, y:300, owner: settings.OWNER_NPC },
+      { x:250, y:200, owner: settings.OWNER_NPC },
+      { x:550, y:100, owner: settings.OWNER_NPC },
+
+      { x:400, y:300, owner: settings.OWNER_PLATFORM },
+      { x:290, y:220, owner: settings.OWNER_PLATFORM },
+      { x:510, y:220, owner: settings.OWNER_PLATFORM },
+      { x:100, y:150, owner: settings.OWNER_PLATFORM },
+      { x:700, y:150, owner: settings.OWNER_PLATFORM },
+      { x:250, y:50,  owner: settings.OWNER_PLATFORM },
+      { x:550, y:50,  owner: settings.OWNER_PLATFORM }
+    ],
+    [
+      { x:50,  y:200, owner: settings.OWNER_PLAYER_A },
+      { x:750, y:200, owner: settings.OWNER_PLAYER_B },
+
+      { x:400, y:100, owner: settings.OWNER_NPC },
+      { x:400, y:400, owner: settings.OWNER_NPC },
+      { x:225, y:200, owner: settings.OWNER_NPC },
+      { x:225, y:300, owner: settings.OWNER_NPC },
+      { x:575, y:200, owner: settings.OWNER_NPC },
+      { x:575, y:300, owner: settings.OWNER_NPC },
+
+      { x:400, y:50,  owner: settings.OWNER_PLATFORM },
+      { x:400, y:230, owner: settings.OWNER_PLATFORM },
+      { x:50,  y:200, owner: settings.OWNER_PLATFORM },
+      { x:750, y:200, owner: settings.OWNER_PLATFORM },
+      { x:220, y:120, owner: settings.OWNER_PLATFORM },
+      { x:220, y:300, owner: settings.OWNER_PLATFORM },
+      { x:580, y:120, owner: settings.OWNER_PLATFORM },
+      { x:580, y:300, owner: settings.OWNER_PLATFORM }
+    ],
+    [
+      { x:100, y:0, owner: settings.OWNER_PLAYER_A },
+      { x:700, y:0, owner: settings.OWNER_PLAYER_B },
+
+      { x:100, y:400, owner: settings.OWNER_NPC },
+      { x:700, y:400, owner: settings.OWNER_NPC },
+      { x:500, y:300, owner: settings.OWNER_NPC },
+      { x:300, y:300, owner: settings.OWNER_NPC },
+      { x:700, y:200, owner: settings.OWNER_NPC },
+      { x:100, y:200, owner: settings.OWNER_NPC },
+
+      { x:100, y:300, owner: settings.OWNER_PLATFORM },
+      { x:700, y:300, owner: settings.OWNER_PLATFORM },
+      { x:290, y:220, owner: settings.OWNER_PLATFORM },
+      { x:510, y:220, owner: settings.OWNER_PLATFORM },
+      { x:100, y:150, owner: settings.OWNER_PLATFORM },
+      { x:700, y:150, owner: settings.OWNER_PLATFORM },
+      { x:250, y:60,  owner: settings.OWNER_PLATFORM },
+      { x:550, y:60,  owner: settings.OWNER_PLATFORM }
+    ]
+  ]
+  this.getLevel = function(index, entityTypes) {
+    var result = levelsContent[index];
+    result = this.buildLevel(result, entityTypes);
+    // create test platform
+    /*result.push(
+      this._createEntity(
+        { x:650, y:150, width:100, height:20, isFixed:true },
+        OWNER_PLATFORM
+      )
+    );
+    */
+    return result;
+  };
+
+  this.buildLevel = function (levelElts, entityTypes)
+  {
+    var result = [];
+    for (var i = 0; i < levelElts.length; i++)
+    {
+      if(levelElts[i].owner == settings.OWNER_PLATFORM)
+      {
+        var localX = (levelElts[i].x);
+        result.push({
+          width: 100,
+          height: 20,
+          x : localX,
+          y : levelElts[i].y,
+          isFixed : true,
+          owner : settings.OWNER_PLATFORM
+        });
+        console.log(result);
+      }
+      else
+      {
+        result.push({
+          width : 32,
+          height : 32,
+          x : levelElts[i].x,
+          y : levelElts[i].y,
+          owner : levelElts[i].owner
+        });
+      }
+    };
+    return result;
+  }
+}
+window.levels = new Levels();
+module.exports = window.levels;

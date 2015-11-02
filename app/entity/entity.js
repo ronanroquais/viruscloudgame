@@ -1,24 +1,22 @@
-define(function(require) {
-	var Entity	= function()
+var Entity	= function()
+{
+	this.owner;
+	// physics body object
+	this.physicsBody;
+	// Image object
+	this.image;
+	// entity hit points
+	this.life;
+
+	this.init		= function()
 	{
-		this.owner;
-		// physics body object
-		this.physicsBody;
-		// Image object
-		this.image;
-		// entity hit points
-		this.life;
+		this.life	= 1.0;
+	};
 
-		this.init		= function()
-		{
-			this.life	= 1.0;
-		};
+	this.update	= function(time)
+	{
+		this.physicsBody.update(time);
+	};
+}
 
-		this.update	= function(time)
-		{
-			this.physicsBody.update(time);
-		};
-	}
-
-	return Entity;
-});
+module.exports = Entity;
